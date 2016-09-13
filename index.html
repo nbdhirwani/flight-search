@@ -1,0 +1,39 @@
+<html>
+<head>
+  <link rel="stylesheet" type="text/css" href="css/index.css">
+</head>
+<body>
+<h1>Flight Search Engine</h1>
+<div class="-body-container">
+	<div class="left-panel">
+		<form name="search-form">
+
+      <div class="ui-widget">
+        <select name="airline-sel" id="airline-sel"></select>
+				<label for="airline-txt">Select an airline</label>
+			</div>
+
+			<div class="ui-widget">
+				<input type="text" name="from-txt" id="from-txt" />
+				<label for="from-txt">Enter Origin City</label>
+			</div>
+
+			<div class="ui-widget">
+				<input type="text" name="to-txt" id="to-txt" />
+				<label for="to-txt">Enter Destination City</label>
+			</div>
+
+			<div class="input-cont">
+				<input type="date" name="travel-date-txt" id="travel-date-txt" />
+				<label for="dept-txt">Travel Date</label>
+			</div>
+
+			<div class="input-cont">
+				<button  name="search-btn" id="search-btn">Search</button>
+			</div>
+		</form>
+</div>
+<script src="js/jquery.min.js"></script>
+<script src="js/jquery.autocomplete.js"></script>
+<script src="js/index.js"></script>
+</body>
