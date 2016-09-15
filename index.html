@@ -1,6 +1,8 @@
 <html>
 <head>
   <link rel="stylesheet" type="text/css" href="css/index.css">
+  <link rel="stylesheet" type="text/css" href="css/easy-autocomplete.themes.min.css">
+  <link rel="stylesheet" type="text/css" href="css/easy-autocomplete.min.css">
 </head>
 <body>
 <h1>Flight Search Engine</h1>
@@ -14,13 +16,13 @@
 			</div>
 
 			<div class="ui-widget">
-				<input type="text" name="from-txt" id="from-txt" />
-				<label for="from-txt">Enter Origin City</label>
+				<input name="from-txt" id="from-txt" placeholder="Enter Origin City"/>
+        <input type="hidden" name="from-hdn" id="from-hdn" />
 			</div>
 
 			<div class="ui-widget">
-				<input type="text" name="to-txt" id="to-txt" />
-				<label for="to-txt">Enter Destination City</label>
+				<input name="to-txt" id="to-txt" placeholder="Enter Destination City"/>
+        <input type="hidden" name="to-hdn" id="to-hdn" />
 			</div>
 
 			<div class="input-cont">
@@ -34,6 +36,6 @@
 		</form>
 </div>
 <script src="js/jquery.min.js"></script>
-<script src="js/jquery.autocomplete.js"></script>
+<script src="js/jquery.easy-autocomplete.min.js"></script>
 <script src="js/index.js"></script>
 </body>

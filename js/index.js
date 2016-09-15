@@ -1,5 +1,6 @@
 var rootURL = 'http://node.locomote.com/code-task';
 
+// Set up airlines selection
 $(document).ready(function() {
   var airlinesURL = rootURL + '/airlines';
   $.ajax({
@@ -10,24 +11,6 @@ $(document).ready(function() {
   });
 });
 
-$('#from-txt').on('input', function(){
-  var fromPort = $('#from-txt').val();
-  if(fromPort.length >= 2){
-    findAirport(fromPort, populateFromAirports);
-  }
-});
-
-$('#to-txt').on('input', function(){
-  var fromPort = $('#to-txt').val();
-  if(fromPort.length >= 2){
-    findAirport(fromPort, populateToAirports);
-  }
-});
-
-$('#search-btn').on('click', function(){
-  findFlights();
-})
-
 function populateAirlines(data) {
   var airlineSelection = $('#airline-sel');
   airlineSelection.find('option').remove();
@@ -36,52 +19,52 @@ function populateAirlines(data) {
   });
 }
 
-function findAirport(name, successCallBack) {
-  var airportURL = rootURL + '/airports?q=' + name;
-  $.ajax({
-      type: 'GET',
-      url: airportURL,
-      dataType: "json", // data type of response
-      success: successCallBack
-  });
-}
+// Set up from-txt autocomplete
+var optionsFrom = {
+  url: function(phrase) {
+    return rootURL + '/airports?q=' + phrase;
+  },
+  getValue: function(element){
+    return element.airportName + ', ' + element.cityName + ' [' + element.airportCode + ']';
+  },
+  list: {
+    onSelectItemEvent: function() {
+      var selectedItemValue = $("#from-txt").getSelectedItemData().airportCode;
+      $("#from-hdn").val(selectedItemValue).trigger("change");
+    }
+  }
+};
+$('#from-txt').easyAutocomplete(optionsFrom);
 
-function populateFromAirports(data) {
-  var airports = new Array();
-  $.each(data, function(key, value) {
-    var airport = new Object();
-    airport.value = value.airportName + ', ' + value.cityName + '(' + value.airportCode + ')';
-    airport.data = value.airportCode;
-    airports.push(airport);
-  });
+// Set up to-txt autocomplete
+var optionsTo = {
+  url: function(phrase) {
+    return rootURL + '/airports?q=' + phrase;
+  },
+  getValue: function(element){
+    return element.airportName + ', ' + element.cityName + ' [' + element.airportCode + ']';
+  },
+  list: {
+    onSelectItemEvent: function() {
+      var selectedItemValue = $("#to-txt").getSelectedItemData().airportCode;
+      $("#to-hdn").val(selectedItemValue).trigger("change");
+    }
+  }
+};
+$('#to-txt').easyAutocomplete(optionsTo);
 
-  $('#from-txt').autocomplete({
-    lookup: airports
-  });
-}
 
-function populateToAirports(data) {
-  var airports = new Array();
-  $.each(data, function(key, value) {
-    var airport = new Object();
-    airport.value = value.airportName + ', ' + value.cityName + '(' + value.airportCode + ')';
-    airport.data = value.airportCode;
-    airports.push(airport);
-  });
-
-  $('#to-txt').autocomplete({
-    lookup: airports
-  });
-}
+// Set up button click event
+$('#search-btn').on('click', function(){
+  findFlights();
+})
 
 function findFlights(){
   var airlineCode = $('#airline-sel').val();
   var travelDate = $('#travel-date-txt').val();
-  var fromPort = $('#from-txt').val();
-  var toPort = $('#to-txt').val();
-  var flightSearchURL = rootURL + 'flight_search' + airlineCode + '?date=' + travelDate + '&from=' + fromPort + '&to=' + toPort;
-
-  console.log(flightSearchURL);
+  var fromPort = $('#from-hdn').val();
+  var toPort = $('#to-hdn').val();
+  var flightSearchURL = rootURL + '/flight_search/' + airlineCode + '?date=' + travelDate + '&from=' + fromPort + '&to=' + toPort;
 
   $.ajax({
       type: 'GET',
@@ -89,4 +72,8 @@ function findFlights(){
       dataType: "json", // data type of response
       success: renderFlightInformation
   });
+}
+
+function renderFlightInformation(data){
+  console.log('Airline Name: ' + data[0].airline.name);
 }
