@@ -1,23 +1,4 @@
-var rootURL = 'http://node.locomote.com/code-task';
-
-// Set up airlines selection
-$(document).ready(function() {
-  var airlinesURL = rootURL + '/airlines';
-  $.ajax({
-      type: 'GET',
-      url: airlinesURL,
-      dataType: "json", // data type of response
-      success: populateAirlines
-  });
-});
-
-function populateAirlines(data) {
-  var airlineSelection = $('#airline-sel');
-  airlineSelection.find('option').remove();
-  $.each(data, function(key, value){
-    airlineSelection.append('<option value=' + value.code + '>' + value.name + '</option>');
-  });
-}
+var rootURL = 'http://localhost:3000';
 
 // Set up from-txt autocomplete
 var optionsFrom = {
@@ -60,11 +41,10 @@ $('#search-btn').on('click', function(){
 })
 
 function findFlights(){
-  var airlineCode = $('#airline-sel').val();
   var travelDate = $('#travel-date-txt').val();
   var fromPort = $('#from-hdn').val();
   var toPort = $('#to-hdn').val();
-  var flightSearchURL = rootURL + '/flight_search/' + airlineCode + '?date=' + travelDate + '&from=' + fromPort + '&to=' + toPort;
+  var flightSearchURL = rootURL + '/search?date=' + travelDate + '&from=' + fromPort + '&to=' + toPort;
 
   $.ajax({
       type: 'GET',
