@@ -10,19 +10,35 @@ var appRouter = function(app, request) {
       var queryPhrase = req.query.q;
 
       if (queryPhrase.length < 2) {
-        return res.send([]);
+        res.send([]);
       } else {
-        var airportsUrl = targetHostRootUrl + "/airports?q=" + queryPhrase;
-        request(airportsUrl, function(error, response, body) {
-          if (!error && response.statusCode == 200) {
-            res.send(JSON.parse(body));
-          } else {
-            console.log(error, response.statusCode, body);
+        var requestOptions = {
+          uri: targetHostRootUrl + "/airports",
+          jresolveWithFullResponse: true,
+          simple: false,
+          qs: {
+            q: queryPhrase
           }
-          res.end("");
-        });
+        };
+        var airports = request(requestOptions)
+          .then(function(response) {
+              if (response.statusCode == 200) {
+                return JSON.parse(response.body);
+              } else {
+                return null;
+              }
+            })
+          .catch(function(reason) {
+                console.log("Request Failed: " + JSON.stringify(reason));
+            });
+
+        if(airports) {
+          res.send(airports);
+        }
     }
+    res.end("");
   });
+
 
 // Route configuration for search
   app.get("/search", function(req, res) {
